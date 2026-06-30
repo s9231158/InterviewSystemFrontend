@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="柯智勛 (Chieh-Hsun) 的個人 AI 面試代理人，展示後端開發實踐與高併發系統架構，並提供即時線上面試預約服務。">
+  <title>柯智勛 Chieh-Hsun | AI 面試代理人</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap"
+    rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="app-background"></div>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-logo">
+        <div class="avatar-ring">
+          <div class="avatar-glow"></div>
+          <img src="unnamed.jpg" alt="柯智勛" class="avatar-img">
+        </div>
+        <div class="logo-text">
+          <h1>柯智勛專欄</h1>
+          <p>AI 面試代理人 (Agent)</p>
+        </div>
+      </div>
+      <div class="status-indicator">
+        <span class="status-pulse" id="agent-status-pulse"></span>
+        <span class="status-text" id="agent-status-text">系統在線運作中</span>
+      </div>
+    </header>
+
+    <!-- Main Layout -->
+    <main class="app-main">
+      <!-- Left Column: Decorative Cat -->
+      <section class="cat-section-deco">
+        <div class="card glass-card cat-card-deco">
+          <div class="video-container">
+            <video id="cat-video" autoplay loop muted playsinline class="cat-video-player">
+              <source src="catvideo.mp4#t=2,10" type="video/mp4">
+              您的瀏覽器不支援 Video 標籤。
+            </video>
+          </div>
+          <p class="cat-label">A-Mui秘書</p>
+        </div>
+      </section>
+
+      <!-- Center Column: Chat -->
+      <section class="chat-section">
+        <div class="card glass-card chat-card">
+          <div class="chat-messages" id="chat-messages">
+            <!-- Bot Welcome Message -->
+            <div class="message-wrapper assistant">
+              <div class="message-avatar">AI</div>
+              <div class="message-bubble">
+                <p>您好！我是智勛的 AI 面試代理人A-Mui秘書。我對智勛的技術專長、專案背景（如這個AI 落地應用的整合的AI履歷或高併發 Redis
+                  防超賣票券系統）及學習歷程有著全面的瞭解。同時，我也能為您線上安排與他的面談預約。</p>
+                <p>有什麼我可以協助您的嗎？您可以直接提問，或使用下方的快速提問按鈕。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Typing Indicator -->
+          <div class="typing-indicator-wrapper" id="typing-indicator" style="display: none;">
+            <div class="indicator-dots">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <span class="indicator-text">代理人思考中...</span>
+          </div>
+
+          <!-- Suggestion Chips -->
+          <div class="suggestion-area">
+            <button class="chip" id="suggest-chip-1">請告訴我智勛在這個面試系統上的實踐</button>
+            <button class="chip" id="suggest-chip-2">智勛有哪些個人特質與轉職歷程？</button>
+            <button class="chip" id="suggest-chip-3">我想跟智勛預約面試</button>
+          </div>
+
+          <!-- Input Bar -->
+          <div class="chat-input-area">
+            <textarea id="chat-input" placeholder="輸入您的問題..." rows="1" maxlength="500"></textarea>
+            <button id="send-btn" class="send-btn" aria-label="發送訊息">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: Info & Form -->
+      <aside class="info-section">
+        <!-- Profile Card -->
+        <div class="card glass-card info-card">
+          <h2>關於柯智勛</h2>
+          <p class="bio">非本科自學轉職的後端工程師，深耕 PHP/Laravel 技術生態系。具備從零建構系統架構、效能最佳化、容器化部署與 CI/CD 自動化實戰能力。重視程式碼可維護性、測試品質與系統安全性。
+          </p>
+
+          <div class="tech-stack-badges">
+            <span class="badge">Laravel 12</span>
+            <span class="badge">PHP 8.2+</span>
+            <span class="badge">Docker</span>
+            <span class="badge">Webman</span>
+            <span class="badge">Socket.IO</span>
+            <span class="badge">Redis</span>
+            <span class="badge">PostgreSQL</span>
+            <span class="badge">MySQL</span>
+            <span class="badge">Cloudflare Workers</span>
+          </div>
+        </div>
+
+        <!-- Booking Card -->
+        <div class="card glass-card booking-card">
+          <h2>快速預約面談</h2>
+          <p class="section-description">填寫以下欄位，AI 代理人將直接為您呼叫排程工具，在資料庫建立預約並以郵件即時通知智勛。</p>
+
+          <form id="booking-form" class="booking-form">
+            <div class="form-group">
+              <label for="booking-name">您的姓名 / 職稱</label>
+              <input type="text" id="booking-name" required placeholder="例如：HR Kevin / Tech Lead John">
+            </div>
+
+            <div class="form-group">
+              <label for="booking-company">公司名稱</label>
+              <input type="text" id="booking-company" required placeholder="例如：科技股份有限公司">
+            </div>
+
+            <div class="form-group">
+              <label for="booking-time">預約時間</label>
+              <input type="datetime-local" id="booking-time" required>
+            </div>
+
+            <div class="form-group">
+              <label for="booking-contact">聯絡電話或 Email</label>
+              <input type="text" id="booking-contact" required placeholder="例如：0912-345-678 或 email@example.com">
+            </div>
+
+            <button type="submit" id="booking-submit-btn" class="submit-btn">送出面試預約</button>
+          </form>
+          <div id="booking-status-message" class="booking-status-message" style="display: none;"></div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>&copy; 2026 柯智勛 Chieh-Hsun. Powered by Gemini 3.1 & Cloudflare Workers.</p>
+    </footer>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="app.js"></script>
+</body>
+
+</html>
